@@ -10,3 +10,5 @@
 ✅ 4.5 5 testów jednostkowych testujące procedury [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/c022c0a1ecc465a344c57914d4849678742ef3c6)
 
 ✅ 5.0 Skrypt w bashu do uruchamiania aplikacji w Pascalu via docker; *należy uruchomić run.sh* [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/94d3cdc903c54d3630b4c778881862020f7e0961)
+
+KOD: [LINK DO ZADANIA 1](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie1)
