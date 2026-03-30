@@ -25,6 +25,20 @@ begin
   writeln;
 end;
 
+procedure BubbleSort(var arr: MyArray);
+var i, j, temp: integer;
+
+begin
+  for i := 1 to size - 1 do
+    for j := 1 to size - i do
+      if arr[j] > arr[j + 1] then
+      begin
+        temp := arr[j];
+        arr[j] := arr[j + 1];
+        arr[j + 1] := temp;
+      end;
+end;
+
 begin
   Generate(liczby);
   writeln('Numbers:');
