@@ -44,4 +44,7 @@ begin
   writeln('Numbers:');
   PrintArray(liczby);
 
+  BubbleSort(liczby);
+  writeln('Sorted:');
+  PrintArray(liczby);
 end.
