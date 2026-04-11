@@ -8,4 +8,4 @@ WORKDIR /testenv
 
 COPY . .
 
-ENTRYPOINT [ "python3", "test_products.py" ]
+ENTRYPOINT [ "sh", "-c", "python3 test_products.py && echo '' && python3 test_categories.py && echo '' && python3 test_orders.py" ]

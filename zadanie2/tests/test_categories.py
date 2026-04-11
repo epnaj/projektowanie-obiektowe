@@ -6,35 +6,34 @@ from curl_wrapper import curl_request, CurlResponse
 from simple_unit_test import SimpleUnitTest
 
 BASE_URL: str = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000"
-API_PATH: str = f"{BASE_URL}/api/products"
+API_PATH: str = f"{BASE_URL}/api/categories"
+
 
 sut: SimpleUnitTest = SimpleUnitTest()
 
 response: Dict = sut.test(
-    f"[CREATE 1] POST {API_PATH}", 
+    f"[CREATE 1] POST {API_PATH}",
     curl_request(
-        "POST", 
-        API_PATH, 
-        json_data = {
-            "name": "Laptop", 
-            "description": "Laptop description", 
-            "price": 4999.99
+        "POST",
+        API_PATH,
+        json_data={
+            "name": "Electronics",
+            "description": "Electronic devices and gadgets"
         }
     ),
     201
 )
 
-product_id: int = int(response["id"])
+category_id: int = int(response["id"])
 
 sut.test(
     f"[CREATE 2] POST {API_PATH}",
     curl_request(
         "POST",
-        API_PATH, 
+        API_PATH,
         json_data={
-            "name": "Mouse",
-            "description": "Mouse description",
-            "price": 2.50
+            "name": "Books",
+            "description": "Physical and digital books"
         }
     ),
     201
@@ -44,16 +43,17 @@ sut.test(
     f"[CREATE invalid] POST {API_PATH}",
     curl_request(
         "POST",
-        API_PATH, 
+        API_PATH,
         json_data={
-            "description": "missing name and price"
+            "description": "missing name"
         }
     ),
     400
 )
 
+# READ
 sut.test(
-    f"[READ 1] GET {API_PATH}",
+    f"[READ all] GET {API_PATH}",
     curl_request(
         "GET",
         API_PATH
@@ -62,10 +62,10 @@ sut.test(
 )
 
 sut.test(
-    f"[READ 2] GET {API_PATH}/{product_id}",
+    f"[READ by id] GET {API_PATH}/{category_id}",
     curl_request(
         "GET",
-        f"{API_PATH}/{product_id}"
+        f"{API_PATH}/{category_id}"
     ),
     200
 )
@@ -79,45 +79,47 @@ sut.test(
     404
 )
 
+# UPDATE
 sut.test(
-    f"[UPDATE] PUT {API_PATH}/{product_id}",
+    f"[UPDATE] PUT {API_PATH}/{category_id}",
     curl_request(
         "PUT",
-        f"{API_PATH}/{product_id}", 
+        f"{API_PATH}/{category_id}",
         json_data={
-            "name": "More expensive Laptop",
-            "price": 10999.99
+            "name": "Consumer Electronics",
+            "description": "Updated description"
         }
     ),
     200
 )
 
 sut.test(
-    f"[UPDATE partial] PUT {API_PATH}/{product_id}",
+    f"[UPDATE partial] PUT {API_PATH}/{category_id}",
     curl_request(
         "PUT",
-        f"{API_PATH}/{product_id}", 
+        f"{API_PATH}/{category_id}",
         json_data={
-            "description": "Laptop description updated"
+            "description": "Only description updated"
         }
     ),
     200
 )
 
+# DELETE
 sut.test(
-    f"[DELETE] DELETE {API_PATH}/{product_id}",
+    f"[DELETE] DELETE {API_PATH}/{category_id}",
     curl_request(
         "DELETE",
-        f"{API_PATH}/{product_id}"
+        f"{API_PATH}/{category_id}"
     ),
     204
 )
 
 sut.test(
-    f"[READ invalid] GET {API_PATH}/{product_id}",
+    f"[READ deleted] GET {API_PATH}/{category_id}",
     curl_request(
         "GET",
-        f"{API_PATH}/{product_id}"
+        f"{API_PATH}/{category_id}"
     ),
     404
 )
