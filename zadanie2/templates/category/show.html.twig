@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Kategoria: {{ category.name }}{% endblock %}
+
+{% block body %}
+    <h1>{{ category.name }}</h1>
+    <div class="card">
+        <div class="detail-row"><strong>ID:</strong> {{ category.id }}</div>
+        <div class="detail-row"><strong>Nazwa:</strong> {{ category.name }}</div>
+        <div class="detail-row"><strong>Opis:</strong> {{ category.description ?? '-' }}</div>
+    </div>
+    <div class="actions">
+        <a href="/categories/{{ category.id }}/edit" class="btn btn-secondary">Edytuj</a>
+        <form class="inline" method="POST" action="/categories/{{ category.id }}/delete" onsubmit="return confirm('Czy na pewno chcesz usunąć?')">
+            <button type="submit" class="btn btn-danger">Usuń</button>
+        </form>
+        <a href="/categories" class="btn btn-primary">Powrót do listy</a>
+    </div>
+{% endblock %}

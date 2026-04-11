@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zamówienia{% endblock %}
+
+{% block body %}
+    <h1>Zamówienia</h1>
+    <a href="/orders/new" class="btn btn-success" style="margin-bottom: 1rem;">Dodaj zamówienie</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Klient</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Data utworzenia</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.customerName }}</td>
+                    <td>{{ order.customerEmail }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.createdAt|date('Y-m-d H:i:s') }}</td>
+                    <td class="actions">
+                        <a href="/orders/{{ order.id }}" class="btn btn-primary">Pokaż</a>
+                        <a href="/orders/{{ order.id }}/edit" class="btn btn-secondary">Edytuj</a>
+                        <form class="inline" method="POST" action="/orders/{{ order.id }}/delete" onsubmit="return confirm('Czy na pewno chcesz usunąć?')">
+                            <button type="submit" class="btn btn-danger">Usuń</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6">Brak zamówień.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

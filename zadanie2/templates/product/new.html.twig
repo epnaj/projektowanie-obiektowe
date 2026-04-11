@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nowy produkt{% endblock %}
+
+{% block body %}
+    <h1>Nowy produkt</h1>
+    <div class="card">
+        <form method="POST" action="/products/new">
+            <div class="form-group">
+                <label for="name">Nazwa</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Opis</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="price">Cena (zł)</label>
+                <input type="number" id="price" name="price" step="0.01" min="0" required>
+            </div>
+            <button type="submit" class="btn btn-success">Utwórz</button>
+            <a href="/products" class="btn btn-secondary">Anuluj</a>
+        </form>
+    </div>
+{% endblock %}

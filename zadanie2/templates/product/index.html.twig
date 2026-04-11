@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produkty{% endblock %}
+
+{% block body %}
+    <h1>Produkty</h1>
+    <a href="/products/new" class="btn btn-success" style="margin-bottom: 1rem;">Dodaj produkt</a>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nazwa</th>
+                <th>Opis</th>
+                <th>Cena</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.description ?? '-' }}</td>
+                    <td>{{ product.price|number_format(2, ',', ' ') }} zł</td>
+                    <td class="actions">
+                        <a href="/products/{{ product.id }}" class="btn btn-primary">Pokaż</a>
+                        <a href="/products/{{ product.id }}/edit" class="btn btn-secondary">Edytuj</a>
+                        <form class="inline" method="POST" action="/products/{{ product.id }}/delete" onsubmit="return confirm('Czy na pewno chcesz usunąć?')">
+                            <button type="submit" class="btn btn-danger">Usuń</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5">Brak produktów.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

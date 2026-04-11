@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produkt: {{ product.name }}{% endblock %}
+
+{% block body %}
+    <h1>{{ product.name }}</h1>
+    <div class="card">
+        <div class="detail-row"><strong>ID:</strong> {{ product.id }}</div>
+        <div class="detail-row"><strong>Nazwa:</strong> {{ product.name }}</div>
+        <div class="detail-row"><strong>Opis:</strong> {{ product.description ?? '-' }}</div>
+        <div class="detail-row"><strong>Cena:</strong> {{ product.price|number_format(2, ',', ' ') }} zł</div>
+    </div>
+    <div class="actions">
+        <a href="/products/{{ product.id }}/edit" class="btn btn-secondary">Edytuj</a>
+        <form class="inline" method="POST" action="/products/{{ product.id }}/delete" onsubmit="return confirm('Czy na pewno chcesz usunąć?')">
+            <button type="submit" class="btn btn-danger">Usuń</button>
+        </form>
+        <a href="/products" class="btn btn-primary">Powrót do listy</a>
+    </div>
+{% endblock %}

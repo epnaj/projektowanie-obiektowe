@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nowa kategoria{% endblock %}
+
+{% block body %}
+    <h1>Nowa kategoria</h1>
+    <div class="card">
+        <form method="POST" action="/categories/new">
+            <div class="form-group">
+                <label for="name">Nazwa</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Opis</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Utwórz</button>
+            <a href="/categories" class="btn btn-secondary">Anuluj</a>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zamówienie #{{ order.id }}{% endblock %}
+
+{% block body %}
+    <h1>Zamówienie #{{ order.id }}</h1>
+    <div class="card">
+        <div class="detail-row"><strong>ID:</strong> {{ order.id }}</div>
+        <div class="detail-row"><strong>Klient:</strong> {{ order.customerName }}</div>
+        <div class="detail-row"><strong>Email:</strong> {{ order.customerEmail }}</div>
+        <div class="detail-row"><strong>Status:</strong> {{ order.status }}</div>
+        <div class="detail-row"><strong>Data utworzenia:</strong> {{ order.createdAt|date('Y-m-d H:i:s') }}</div>
+    </div>
+    <div class="actions">
+        <a href="/orders/{{ order.id }}/edit" class="btn btn-secondary">Edytuj</a>
+        <form class="inline" method="POST" action="/orders/{{ order.id }}/delete" onsubmit="return confirm('Czy na pewno chcesz usunąć?')">
+            <button type="submit" class="btn btn-danger">Usuń</button>
+        </form>
+        <a href="/orders" class="btn btn-primary">Powrót do listy</a>
+    </div>
+{% endblock %}

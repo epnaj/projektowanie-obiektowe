@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nowe zamówienie{% endblock %}
+
+{% block body %}
+    <h1>Nowe zamówienie</h1>
+    <div class="card">
+        <form method="POST" action="/orders/new">
+            <div class="form-group">
+                <label for="customerName">Imię i nazwisko klienta</label>
+                <input type="text" id="customerName" name="customerName" required>
+            </div>
+            <div class="form-group">
+                <label for="customerEmail">Email klienta</label>
+                <input type="email" id="customerEmail" name="customerEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="new">Nowe</option>
+                    <option value="processing">W realizacji</option>
+                    <option value="shipped">Wysłane</option>
+                    <option value="completed">Zakończone</option>
+                    <option value="cancelled">Anulowane</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Utwórz</button>
+            <a href="/orders" class="btn btn-secondary">Anuluj</a>
+        </form>
+    </div>
+{% endblock %}
