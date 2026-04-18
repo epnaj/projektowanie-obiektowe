@@ -1,11 +1,16 @@
 package com.example.zadanie3
 
-object AuthService {
+import org.springframework.stereotype.Service
 
-    private const val VALID_USERNAME = "admin"
-    private const val VALID_PASSWORD = "admin123"
+@Service
+class AuthService {
 
     fun authenticate(username: String, password: String): Boolean {
         return username == VALID_USERNAME && password == VALID_PASSWORD
+    }
+
+    companion object {
+        private const val VALID_USERNAME = "admin"
+        private const val VALID_PASSWORD = "admin123"
     }
 }

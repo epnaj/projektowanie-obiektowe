@@ -11,11 +11,11 @@ data class LoginResponse(val authenticated: Boolean)
 
 @RestController
 @RequestMapping("/login")
-class AuthController {
+class AuthController(private val authService: AuthService) {
 
     @PostMapping
     fun login(@RequestBody request: LoginRequest): LoginResponse {
-        val authenticated = AuthService.authenticate(request.username, request.password)
+        val authenticated = authService.authenticate(request.username, request.password)
         return LoginResponse(authenticated)
     }
 }
