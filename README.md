@@ -57,3 +57,19 @@ cd zadanie2
 ❌ 5.0 Stworzenie panelu administracyjnego
 
 KOD: [LINK DO ZADANIA 2](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie2)
+
+---
+
+### Zadanie 3
+
+✅ 3.0 Jeden kontroler zwracający dane z listy w formacie JSON (Kotlin + Spring Boot)
+
+```bash
+cd zadanie3
+docker build -t zadanie3 .
+./run-docker.sh zadanie3
+```
+
+> Endpoint dostępny pod http://localhost:8000/users
+
+KOD: [LINK DO ZADANIA 3](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie3)
