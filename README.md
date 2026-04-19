@@ -62,14 +62,52 @@ KOD: [LINK DO ZADANIA 2](https://github.com/epnaj/projektowanie-obiektowe/tree/m
 
 ### Zadanie 3
 
-✅ 3.0 Jeden kontroler zwracający dane z listy w formacie JSON (Kotlin + Spring Boot)
-
 ```bash
 cd zadanie3
 docker build -t zadanie3 .
 ./run-docker.sh zadanie3
 ```
 
-> Endpoint dostępny pod http://localhost:8000/users
+✅ 3.0 Należy stworzyć jeden kontroler wraz z danymi wyświetlanymi z
+listy na endpoint’cie w formacie JSON - Kotlin + Spring Boot [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/415eeb765bfb63dd9f4f303a115be012763e4af6)
+
+> http://localhost:8000/users
+
+✅ 3.5 Należy stworzyć klasę do autoryzacji (mock) jako Singleton w
+formie eager [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/eecac077e0b3153b026959644e8cf9c1f2c28332)
+
+✅ 4.0 Należy obsłużyć dane autoryzacji przekazywane przez użytkownika [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/d7ddbe4985d9d9bec8832e3b3a59d5978ccd9cd7)
+
+> Endpoint `POST /login` przyjmuje JSON `{ "username": "...", "password": "..." }` i zwraca `{ "authenticated": true/false }`. Poprawne dane: `admin` / `admin123`.
+
+```bash
+curl -X POST http://localhost:8000/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'
+```
+
+✅ 4.5 Należy wstrzyknąć singleton do głównej klasy via @Autowired lub
+kontruktor (constructor injection) [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/0e7bb2635c0cf29f5926f18a628ccaa7360570e0)
+
+✅ 5.0 Obok wersji Eager do wyboru powinna być wersja Singletona w wersji
+lazy [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/106c7910d29947f359f57911a3c0a4d76e323f48)
+
+> `AuthService` został wyciągnięty jako interfejs z dwiema implementacjami: `EagerAuthService` (`@Service @Qualifier("eager")`, domyślnie eager - tworzony przy starcie kontekstu) oraz `LazyAuthService` (`@Service @Lazy @Qualifier("lazy")` - inicjalizowany przy pierwszym użyciu). `AuthController` przez constructor injection otrzymuje obie wersje (rozróżniane `@Qualifier`) i udostępnia dwa endpointy do wyboru: `POST /login/eager` i `POST /login/lazy`. Endpoint `POST /login` zachowany jako wersja domyślna (eager) dla wstecznej kompatybilności.
+
+Obie klasy mają `init { println(...) }` pokazujące, kiedy dokładnie są tworzone:
+- `EagerAuthService created` - pojawi się w logach zaraz po starcie aplikacji
+- `LazyAuthService created` - pojawi się dopiero po pierwszym requeście na `/login/lazy`
+
+```bash
+# wersja eager
+curl -X POST http://localhost:8000/login/eager \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'
+
+# wersja lazy (przy pierwszym wywołaniu zobaczysz w logach "LazyAuthService created")
+curl -X POST http://localhost:8000/login/lazy \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'
+```
 
 KOD: [LINK DO ZADANIA 3](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie3)
