@@ -156,3 +156,32 @@ curl -X POST http://localhost:8000/weather \
 ```
 
 KOD: [LINK DO ZADANIA 4](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie4)
+
+---
+
+### Zadanie 5
+
+```bash
+cd zadanie5
+docker compose up --build
+```
+
+> Frontend (React + Vite): http://localhost:5173
+>
+> Backend (Node http): http://localhost:8000
+
+✅ 3.0 W ramach projektu należy stworzyć komponenty Produkty oraz Płatności; komponent Produkty powinien pobierać listę produktów z aplikacji serwerowej, natomiast komponent Płatności powinien wysyłać dane płatności do aplikacji serwerowej. [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/4f7bd5d)
+
+> Endpointy `GET /api/products`, `POST /api/payments`.
+
+✅ 3.5 Należy dodać komponent Koszyk wraz z osobnym widokiem; aplikacja powinna umożliwiać przechodzenie pomiędzy widokami przy użyciu routingu. [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/7716124)
+
+✅ 4.0 Dane pomiędzy komponentami, takimi jak Produkty, Koszyk i Płatności, powinny być przekazywane z wykorzystaniem React hooks, np. useState, useEffect lub useContext. [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/b322072)
+
+> Refaktor koszyka na `CartContext` + hook `useCart()`. Eliminuje prop drilling — Products, Cart i Payments konsumują kontekst bezpośrednio. Każdy komponent dalej używa lokalnego `useState`/`useEffect` dla własnego stanu.
+
+✅ 4.5 Należy przygotować konfigurację umożliwiającą uruchomienie aplikacji klienckiej oraz serwerowej w kontenerach Docker za pomocą docker-compose. (zrobione już wcześniej) [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/b322072)
+
+✅ 5.0 Należy wykorzystać bibliotekę axios do komunikacji z serwerem oraz skonfigurować obsługę CORS, aby frontend mógł poprawnie komunikować się z backendem. [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/10175be)
+
+KOD: [LINK DO ZADANIA 5](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie5)
