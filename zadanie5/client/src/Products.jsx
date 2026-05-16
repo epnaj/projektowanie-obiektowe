@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from './CartContext.jsx';
+import api from './api.js';
 
 export default function Products() {
   const { addToCart } = useCart();
@@ -8,14 +9,8 @@ export default function Products() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('/api/products')
-      .then((r) => {
-        if (!r.ok) {
-          throw new Error('HTTP ' + r.status);
-        }
-        return r.json();
-      })
-      .then((data) => setProducts(data))
+    api.get('/api/products')
+      .then((res) => setProducts(res.data))
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, []);

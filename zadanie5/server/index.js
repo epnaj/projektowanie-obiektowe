@@ -16,6 +16,12 @@ const payments = [];
 
 const MIME = { '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.ico': 'image/x-icon' };
 
+function setCorsHeaders(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
 function sendJson(res, status, data) {
   res.writeHead(status, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify(data));
@@ -67,6 +73,12 @@ function serveStatic(req, res) {
 }
 
 const server = http.createServer(async (req, res) => {
+  setCorsHeaders(res);
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
   const { pathname } = url.parse(req.url);
   if (req.method === 'GET' && pathname === '/api/products') return sendJson(res, 200, products);
   if (req.method === 'GET' && pathname === '/api/payments') return sendJson(res, 200, payments);

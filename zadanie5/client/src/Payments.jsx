@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from './CartContext.jsx';
+import api from './api.js';
 
 export default function Payments() {
   const { cart, removeFromCart } = useCart();
@@ -10,26 +11,18 @@ export default function Payments() {
   const [cartStatus, setCartStatus] = useState(null);
 
   useEffect(() => {
-    fetch('/api/products').then((r) => r.json()).then((data) => {
-      setProducts(data);
-      if (data.length) {
-        setProductId(String(data[0].id));
+    api.get('/api/products').then((res) => {
+      setProducts(res.data);
+      if (res.data.length) {
+        setProductId(String(res.data[0].id));
       }
     });
-    fetch('/api/payments').then((r) => r.json()).then(setPayments);
+    api.get('/api/payments').then((res) => setPayments(res.data));
   }, []);
 
   async function postPayment(id) {
-    const res = await fetch('/api/payments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ productId: Number(id) })
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || 'Save failed');
-    }
-    return data;
+    const res = await api.post('/api/payments', { productId: Number(id) });
+    return res.data;
   }
 
   async function handleSubmit(e) {
@@ -40,7 +33,7 @@ export default function Payments() {
       setPayments((prev) => [...prev, data]);
       setStatus('Payment saved: ' + data.productName + ' (' + data.amount + ' PLN)');
     } catch (err) {
-      setStatus('Error: ' + err.message);
+      setStatus('Error: ' + (err.response?.data?.error || err.message));
     }
   }
 
@@ -63,7 +56,8 @@ export default function Payments() {
       setCartStatus('Paid for ' + saved.length + ' items (' + total + ' PLN).');
     } catch (err) {
       setPayments((prev) => [...prev, ...saved]);
-      setCartStatus('Error: ' + err.message + ' (paid ' + saved.length + ' of ' + items.length + ')');
+      const msg = err.response?.data?.error || err.message;
+      setCartStatus('Error: ' + msg + ' (paid ' + saved.length + ' of ' + items.length + ')');
     }
   }
 
