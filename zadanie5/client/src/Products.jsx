@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export default function Products() {
+export default function Products({ onAddToCart }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -26,8 +26,9 @@ export default function Products() {
       <h2>Products</h2>
       <ul>
         {products.map((p) => (
-          <li key={p.id}>
-            <strong>{p.name}</strong> - {p.price} PLN
+          <li key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+            <span><strong>{p.name}</strong> - {p.price} PLN</span>
+            <button type="button" onClick={() => onAddToCart(p)}>Add to cart</button>
           </li>
         ))}
       </ul>
