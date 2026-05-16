@@ -1,6 +1,8 @@
 import React from 'react';
+import { useCart } from './CartContext.jsx';
 
-export default function Cart({ items, onRemove }) {
+export default function Cart() {
+  const { cart: items, removeFromCart: onRemove } = useCart();
   if (items.length === 0) {
     return (
       <section>

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useCart } from './CartContext.jsx';
 
-export default function Products({ onAddToCart }) {
+export default function Products() {
+  const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,7 +30,7 @@ export default function Products({ onAddToCart }) {
         {products.map((p) => (
           <li key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
             <span><strong>{p.name}</strong> - {p.price} PLN</span>
-            <button type="button" onClick={() => onAddToCart(p)}>Add to cart</button>
+            <button type="button" onClick={() => addToCart(p)}>Add to cart</button>
           </li>
         ))}
       </ul>

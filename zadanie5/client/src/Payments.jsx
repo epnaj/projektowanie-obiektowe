@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useCart } from './CartContext.jsx';
 
-export default function Payments({ cart, onRemoveFromCart }) {
+export default function Payments() {
+  const { cart, removeFromCart } = useCart();
   const [products, setProducts] = useState([]);
   const [payments, setPayments] = useState([]);
   const [productId, setProductId] = useState('');
@@ -54,7 +56,7 @@ export default function Payments({ cart, onRemoveFromCart }) {
       for (const item of items) {
         const data = await postPayment(item.id);
         saved.push(data);
-        onRemoveFromCart(item.id);
+        removeFromCart(item.id);
       }
       setPayments((prev) => [...prev, ...saved]);
       const total = saved.reduce((sum, p) => sum + p.amount, 0);
