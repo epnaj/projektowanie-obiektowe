@@ -3,6 +3,7 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -11,11 +12,11 @@ import (
 )
 
 type WeatherProxy struct {
-	real   WeatherService
+	real   *LocalWeatherService
 	client *http.Client
 }
 
-func NewWeatherProxy(real WeatherService) *WeatherProxy {
+func NewWeatherProxy(real *LocalWeatherService) *WeatherProxy {
 	return &WeatherProxy{
 		real: real,
 		client: &http.Client{
@@ -26,8 +27,8 @@ func NewWeatherProxy(real WeatherService) *WeatherProxy {
 
 type wttrResponse struct {
 	CurrentCondition []struct {
-		TempC      string `json:"temp_C"`
-		Humidity   string `json:"humidity"`
+		TempC       string `json:"temp_C"`
+		Humidity    string `json:"humidity"`
 		WeatherDesc []struct {
 			Value string `json:"value"`
 		} `json:"weatherDesc"`
@@ -37,6 +38,10 @@ type wttrResponse struct {
 func (p *WeatherProxy) GetWeather(location string) (*models.Weather, error) {
 	weather, err := p.fetchRemote(location)
 	if err == nil {
+		// In case of successful data fetch, save it in db.
+		if saveErr := p.real.Save(weather); saveErr != nil {
+			log.Printf("weather proxy: nie udalo sie zapisac danych dla %q: %v", location, saveErr)
+		}
 		return weather, nil
 	}
 	// Fallback to the real subject when the external service is unavailable

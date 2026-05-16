@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	"zadanie4/models"
 )
@@ -24,4 +25,11 @@ func (s *LocalWeatherService) GetWeather(location string) (*models.Weather, erro
 		return nil, err
 	}
 	return &weather, nil
+}
+
+func (s *LocalWeatherService) Save(weather *models.Weather) error {
+	return s.db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "location"}},
+		DoUpdates: clause.AssignmentColumns([]string{"temperature", "humidity", "description"}),
+	}).Create(weather).Error
 }
