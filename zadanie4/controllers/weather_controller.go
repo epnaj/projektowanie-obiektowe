@@ -3,21 +3,22 @@ package controllers
 import (
 	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 
-	"zadanie4/models"
+	"zadanie4/services"
 )
 
-// WeatherController handles weather-related HTTP requests
+// WeatherController handles weather-related HTTP requests.
+// It depends on the WeatherService interface so it does not know
+// whether it is talking to the real subject or to a proxy.
 type WeatherController struct {
-	db *gorm.DB
+	service services.WeatherService
 }
 
-func NewWeatherController(db *gorm.DB) *WeatherController {
-	return &WeatherController{db: db}
+func NewWeatherController(service services.WeatherService) *WeatherController {
+	return &WeatherController{service: service}
 }
 
 func (c *WeatherController) RegisterRoutes(e *echo.Echo) {
@@ -26,10 +27,9 @@ func (c *WeatherController) RegisterRoutes(e *echo.Echo) {
 }
 
 func (c *WeatherController) GetWeather(ctx echo.Context) error {
-	location := strings.ToLower(ctx.Param("location"))
+	location := ctx.Param("location")
 
-	var weather models.Weather
-	err := c.db.Where("LOWER(location) = ?", location).First(&weather).Error
+	weather, err := c.service.GetWeather(location)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return ctx.JSON(http.StatusNotFound, map[string]string{

@@ -6,6 +6,7 @@ import (
 
 	"zadanie4/controllers"
 	"zadanie4/database"
+	"zadanie4/services"
 )
 
 func main() {
@@ -19,7 +20,10 @@ func main() {
 		e.Logger.Fatal(err)
 	}
 
-	weatherController := controllers.NewWeatherController(db)
+	localService := services.NewLocalWeatherService(db)
+	weatherService := services.NewWeatherProxy(localService)
+
+	weatherController := controllers.NewWeatherController(weatherService)
 	weatherController.RegisterRoutes(e)
 
 	e.Logger.Fatal(e.Start(":8000"))
