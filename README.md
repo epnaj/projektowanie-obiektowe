@@ -111,3 +111,48 @@ curl -X POST http://localhost:8000/login/lazy \
 ```
 
 KOD: [LINK DO ZADANIA 3](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie3)
+
+---
+
+### Zadanie 4
+
+```bash
+cd zadanie4
+docker build -t zadanie4 .
+./run-docker.sh zadanie4
+```
+
+> http://localhost:8000
+
+✅ 3.0 Należy stworzyć aplikację we frameworki echo w j. Go, która będzie
+miała kontroler Pogody, która pozwala na pobieranie danych o pogodzie
+(lub akcjach giełdowych) [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/b2325bd)
+
+> endpoint `GET/POST /weather/:location`
+
+```bash
+curl http://localhost:8000/weather/warsaw
+curl -X POST http://localhost:8000/weather/krakow
+```
+
+✅ 3.5 Należy stworzyć model Pogoda (lub Giełda) wykorzystując gorm, a dane załadować z listy przy uruchomieniu [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/13475fc)
+
+> Model `Weather` z tagami gorm (`primaryKey`, `uniqueIndex`, `not null`). Ładuje listę startową (Warsaw, Krakow, Gdansk) do SQLite
+
+✅ 4.0 Należy stworzyć klasę proxy, która pobierze dane z serwisu zewnętrznego podczas zapytania do naszego kontrolera [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/6e6af08)
+
+✅ 4.5 Należy zapisać pobrane dane z zewnątrz do bazy danych [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/b268ddc)
+
+✅ 5.0 5.0 Należy rozszerzyć endpoint na więcej niż jedną lokalizację (Pogoda), lub akcje (Giełda) zwracając JSONa [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/9099735)
+
+> Nowy multi-endpoint `GET /weather?locations=A,B,C` oraz `POST /weather` z body `{"locations":["A","B"]}`
+
+```bash
+curl "http://localhost:8000/weather?locations=Warsaw,Krakow,Tokyo"
+
+curl -X POST http://localhost:8000/weather \
+  -H "Content-Type: application/json" \
+  -d '{"locations":["Warsaw","Krakow","London"]}'
+```
+
+KOD: [LINK DO ZADANIA 4](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie4)
