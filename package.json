@@ -1,0 +1,24 @@
+{
+  "name": "projektowanie-obiektowe",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Devcontainer toosl",
+  "scripts": {
+    "prepare": "husky",
+    "lint": "eslint zadanie5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "eslint": "^9.15.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.12.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10"
+  },
+  "lint-staged": {
+    "zadanie5/client/src/**/*.{js,jsx}": "eslint --fix",
+    "zadanie5/server/**/*.js": "eslint --fix"
+  }
+}
