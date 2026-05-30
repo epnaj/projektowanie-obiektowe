@@ -185,3 +185,22 @@ docker compose up --build
 ✅ 5.0 Należy wykorzystać bibliotekę axios do komunikacji z serwerem oraz skonfigurować obsługę CORS, aby frontend mógł poprawnie komunikować się z backendem. [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/10175be)
 
 KOD: [LINK DO ZADANIA 5](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie5)
+
+---
+
+### Zadanie 6
+
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=epnaj_projektowanie-obiektowe)](https://sonarcloud.io/summary/new_code?id=epnaj_projektowanie-obiektowe)
+
+✅ 3.0 Należy skonfigurować husky + lint-staged uruchamianie lintowania przed commitem [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/26c93a3)
+
+> Po `npm install` w roocie husky instaluje hook `.husky/pre-commit`;  
+> `npx lint-staged` -> ESLint na plikach z indeksu. Commit z błędami ESLint jest blokowany.
+
+✅ 3.5 Należy wyeliminować wszystkie bugi w kodzie w Sonarze (kod aplikacji klienckiej) [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/73c6d1a)
+
+✅ Przeskanować oraz naprawić dowolny projekt open source narzędziem CodeQL [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/4cd6a46)
+
+✅ 4.5 Należy usunąć problemy typu Code Smell w kodzie w Sonarze (kotlin, go, js). Należy dodać badge z Sonara [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/863eb18)
+
+✅ Skonfigurować Github Actions z linterem oraz CodeQL [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/7b7f91a)
