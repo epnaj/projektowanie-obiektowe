@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCart } from './CartContext.jsx';
 import api from './api.js';
+
+
+async function postPayment(id) {
+  const res = await api.post('/api/payments', { productId: Number(id) });
+  return res.data;
+}
 
 export default function Payments() {
   const { cart, removeFromCart } = useCart();
@@ -19,11 +25,6 @@ export default function Payments() {
     });
     api.get('/api/payments').then((res) => setPayments(res.data));
   }, []);
-
-  async function postPayment(id) {
-    const res = await api.post('/api/payments', { productId: Number(id) });
-    return res.data;
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();

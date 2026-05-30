@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-if [ $# -ne 1 ]; then
-    echo "Error: Missing required argument."
-    echo "Usage: $0 <docker image name>"
+if [[ $# -ne 1 ]]; then
+    echo "Error: Missing required argument." >&2
+    echo "Usage: $0 zadanie2 <docker image name>" >&2
     exit 1
 fi
 

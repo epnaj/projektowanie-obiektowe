@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 
-interface AuthService {
+fun interface AuthService {
     fun authenticate(username: String, password: String): Boolean
 }
 

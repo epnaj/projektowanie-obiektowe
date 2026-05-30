@@ -6,9 +6,8 @@ WORKDIR /app
 
 COPY . /app/
 
-RUN rm -f composer.lock && composer update --no-interaction --optimize-autoloader
-
-RUN mkdir -p var \
+RUN rm -f composer.lock && composer update --no-interaction --optimize-autoloader && \
+    mkdir -p var \
     && php bin/console doctrine:schema:update --force --no-interaction
 
 EXPOSE 8000

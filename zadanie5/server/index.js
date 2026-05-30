@@ -1,7 +1,7 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const url = require('url');
+const http = require('node:http');
+const fs = require('node:fs');
+const path = require('node:path');
+const url = require('node:url');
 
 const PORT = process.env.PORT || 8000;
 const CLIENT_DIST = path.join(__dirname, '..', 'client', 'dist');
@@ -98,7 +98,7 @@ const server = http.createServer(async (req, res) => {
       };
       payments.push(payment);
       return sendJson(res, 201, payment);
-    } catch (e) { 
+    } catch { 
       return sendJson(res, 400, { error: 'Invalid JSON' }); 
     }
   }

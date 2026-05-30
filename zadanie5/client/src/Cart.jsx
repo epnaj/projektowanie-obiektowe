@@ -1,4 +1,3 @@
-import React from 'react';
 import { useCart } from './CartContext.jsx';
 
 export default function Cart() {
@@ -18,8 +17,8 @@ export default function Cart() {
     <section>
       <h2>Cart</h2>
       <ul>
-        {items.map((item, index) => (
-          <li key={index} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+        {items.map((item) => (
+          <li key={item.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
             <span><strong>{item.name}</strong> - {item.price} PLN</span>
             <button type="button" onClick={() => onRemove(item.id)}>Remove</button>
           </li>

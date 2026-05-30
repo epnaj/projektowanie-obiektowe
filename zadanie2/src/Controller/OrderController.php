@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/orders')]
 class OrderController extends AbstractController
 {
+    private const DATE_FORMAT = 'Y-m-d H:i:s';
+    
     #[Route('', methods: ['GET'])]
     public function index(OrderRepository $repository): JsonResponse
     {
@@ -24,7 +26,7 @@ class OrderController extends AbstractController
             'customerName' => $order->getCustomerName(),
             'customerEmail' => $order->getCustomerEmail(),
             'status' => $order->getStatus(),
-            'createdAt' => $order->getCreatedAt()->format('Y-m-d H:i:s'),
+            'createdAt' => $order->getCreatedAt()->format(self::DATE_FORMAT),
         ], $orders);
 
         return $this->json($data);
@@ -38,7 +40,7 @@ class OrderController extends AbstractController
             'customerName' => $order->getCustomerName(),
             'customerEmail' => $order->getCustomerEmail(),
             'status' => $order->getStatus(),
-            'createdAt' => $order->getCreatedAt()->format('Y-m-d H:i:s'),
+            'createdAt' => $order->getCreatedAt()->format(self::DATE_FORMAT),
         ]);
     }
 
@@ -65,7 +67,7 @@ class OrderController extends AbstractController
             'customerName' => $order->getCustomerName(),
             'customerEmail' => $order->getCustomerEmail(),
             'status' => $order->getStatus(),
-            'createdAt' => $order->getCreatedAt()->format('Y-m-d H:i:s'),
+            'createdAt' => $order->getCreatedAt()->format(self::DATE_FORMAT),
         ], Response::HTTP_CREATED);
     }
 
@@ -91,7 +93,7 @@ class OrderController extends AbstractController
             'customerName' => $order->getCustomerName(),
             'customerEmail' => $order->getCustomerEmail(),
             'status' => $order->getStatus(),
-            'createdAt' => $order->getCreatedAt()->format('Y-m-d H:i:s'),
+            'createdAt' => $order->getCreatedAt()->format(self::DATE_FORMAT),
         ]);
     }
 
