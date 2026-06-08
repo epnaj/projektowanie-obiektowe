@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#import("title")</title>
+    <style>
+        body { font-family: sans-serif; margin: 2rem; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
+        th { background: #f0f0f0; }
+        a.button, button {
+            display: inline-block; padding: 0.3rem 0.6rem; margin: 0.1rem;
+            text-decoration: none; border: 1px solid #888; border-radius: 4px;
+            background: #f8f8f8; cursor: pointer;
+        }
+        form.inline { display: inline; }
+        label { display: block; margin-top: 0.5rem; }
+        input, textarea { width: 100%; max-width: 400px; padding: 0.3rem; }
+    </style>
+</head>
+<body>
+    <h1>#import("title")</h1>
+    <nav><a href="/web/products">List of products</a></nav>
+    <hr>
+    #import("body")
+</body>
+</html>

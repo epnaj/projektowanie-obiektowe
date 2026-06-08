@@ -22,7 +22,8 @@ struct ProductController: RouteCollection {
     // POST /products
     func create(req: Request) async throws -> Product {
         let product = try req.content.decode(Product.self)
-        
+        try product.validateBusinessRules()
+
         try await product.create(on: req.db)
         return product
     }
@@ -48,6 +49,7 @@ struct ProductController: RouteCollection {
         product.price       = updated.price
         product.description = updated.description
         product.quantity = updated.quantity
+        try product.validateBusinessRules()
 
         try await product.update(on: req.db)
         return product

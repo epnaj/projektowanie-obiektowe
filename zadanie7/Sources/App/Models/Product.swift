@@ -28,4 +28,10 @@ final class Product: Model, Content {
         self.description = description
         self.quantity = quantity
     }
+
+    func validateBusinessRules() throws {
+        guard quantity >= 0 else {
+            throw Abort(.badRequest, reason: "Quantity of products can't be negative.")
+        }
+    }
 }

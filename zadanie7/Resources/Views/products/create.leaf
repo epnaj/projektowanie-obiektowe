@@ -1,0 +1,23 @@
+#extend("base"):
+    #export("title"): New product #endexport
+    #export("body"):
+        <form method="post" action="/web/products">
+            <label>Name
+                <input type="text" name="name" required>
+            </label>
+            <label>Price
+                <input type="number" step="0.01" name="price" required>
+            </label>
+            <label>Description
+                <textarea name="description"></textarea>
+            </label>
+            <label>Quantity
+                <input type="number" name="quantity" value="0" min="0" required>
+            </label>
+            <p>
+                <button type="submit">Save</button>
+                <a class="button" href="/web/products">Cancel</a>
+            </p>
+        </form>
+    #endexport
+#endextend

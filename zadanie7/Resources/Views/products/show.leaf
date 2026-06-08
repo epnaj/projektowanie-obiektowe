@@ -1,0 +1,18 @@
+#extend("base"):
+    #export("title"): Product: #(product.name) #endexport
+    #export("body"):
+        <table>
+            <tr><th>Name</th><td>#(product.name)</td></tr>
+            <tr><th>Price</th><td>#(product.price)</td></tr>
+            <tr><th>Description</th><td>#(product.description)</td></tr>
+            <tr><th>Quantity</th><td>#(product.quantity)</td></tr>
+        </table>
+        <p>
+            <a class="button" href="/web/products/#(product.id)/edit">Edit</a>
+            <form class="inline" method="post" action="/web/products/#(product.id)/delete">
+                <button type="submit">Delete</button>
+            </form>
+            <a class="button" href="/web/products">Back to list</a>
+        </p>
+    #endexport
+#endextend
