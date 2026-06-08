@@ -6,6 +6,7 @@
             <tr><th>Price</th><td>#(product.price)</td></tr>
             <tr><th>Description</th><td>#(product.description)</td></tr>
             <tr><th>Quantity</th><td>#(product.quantity)</td></tr>
+            <tr><th>Category</th><td>#if(product.category):#(product.category.name)#else:-#endif</td></tr>
         </table>
         <p>
             <a class="button" href="/web/products/#(product.id)/edit">Edit</a>

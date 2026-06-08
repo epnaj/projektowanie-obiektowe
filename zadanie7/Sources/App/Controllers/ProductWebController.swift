@@ -7,6 +7,8 @@ struct ProductWebController: RouteCollection {
         var price: Double
         var description: String?
         var quantity: Int
+        // Empty string means lack of category
+        var categoryID: String?
     }
 
     struct IndexContext: Content {
@@ -15,6 +17,15 @@ struct ProductWebController: RouteCollection {
 
     struct ProductContext: Content {
         var product: Product
+    }
+
+    struct CreateContext: Content {
+        var categories: [Category]
+    }
+
+    struct EditContext: Content {
+        var product: Product
+        var categories: [Category]
     }
 
     func boot(routes: RoutesBuilder) throws {
@@ -34,17 +45,23 @@ struct ProductWebController: RouteCollection {
 
     // GET /web/products
     func index(req: Request) async throws -> View {
-        let products = try await Product.query(on: req.db).all()
+        let products = try await Product.query(on: req.db)
+            .with(\.$category)
+            .all()
 
         return try await req.view.render(
-            "products/index", 
+            "products/index",
             IndexContext(products: products)
         )
     }
 
     // GET /web/products/create
     func createForm(req: Request) async throws -> View {
-        try await req.view.render("products/create")
+        let categories = try await Category.query(on: req.db).all()
+        return try await req.view.render(
+            "products/create",
+            CreateContext(categories: categories)
+        )
     }
 
     // POST /web/products
@@ -56,6 +73,8 @@ struct ProductWebController: RouteCollection {
             description: form.description,
             quantity: form.quantity
         )
+
+        product.$category.id = parseCategoryID(form.categoryID)
         try product.validateBusinessRules()
 
         try await product.create(on: req.db)
@@ -64,10 +83,10 @@ struct ProductWebController: RouteCollection {
 
     // GET /web/products/:productID
     func show(req: Request) async throws -> View {
-        let product = try await find(req)
+        let product = try await find(req, withCategory: true)
 
         return try await req.view.render(
-            "products/show", 
+            "products/show",
             ProductContext(product: product)
         )
     }
@@ -75,10 +94,11 @@ struct ProductWebController: RouteCollection {
     // GET /web/products/:productID/edit
     func editForm(req: Request) async throws -> View {
         let product = try await find(req)
+        let categories = try await Category.query(on: req.db).all()
 
         return try await req.view.render(
-            "products/edit", 
-            ProductContext(product: product)
+            "products/edit",
+            EditContext(product: product, categories: categories)
         )
     }
 
@@ -87,10 +107,12 @@ struct ProductWebController: RouteCollection {
         let product = try await find(req)
         let form    = try req.content.decode(ProductForm.self)
 
-        product.name        = form.name
-        product.price       = form.price
-        product.description = form.description
-        product.quantity    = form.quantity
+        product.name         = form.name
+        product.price        = form.price
+        product.description  = form.description
+        product.quantity     = form.quantity
+        product.$category.id = parseCategoryID(form.categoryID)
+
         try product.validateBusinessRules()
 
         try await product.update(on: req.db)
@@ -105,13 +127,27 @@ struct ProductWebController: RouteCollection {
         return req.redirect(to: "/web/products")
     }
 
-    private func find(_ req: Request) async throws -> Product {
-        guard let product = try await Product.find(
-            req.parameters.get("productID"),
-            on: req.db
-        ) else {
+    private func find(_ req: Request, withCategory: Bool = false) async throws -> Product {
+        guard let id = req.parameters.get("productID", as: UUID.self) else {
+            throw Abort(.badRequest)
+        }
+        
+        var query = Product.query(on: req.db).filter(\.$id == id)
+        if withCategory {
+            query = query.with(\.$category)
+        }
+
+        guard let product = try await query.first() else {
             throw Abort(.notFound)
         }
         return product
+    }
+
+    private func parseCategoryID(_ raw: String?) -> UUID? {
+        guard let raw, !raw.isEmpty else { 
+            return nil 
+        }
+
+        return UUID(uuidString: raw)
     }
 }

@@ -14,6 +14,14 @@
             <label>Quantity
                 <input type="number" name="quantity" value="#(product.quantity)" min="0" required>
             </label>
+            <label>Category
+                <select name="categoryID">
+                    <option value="">— none —</option>
+                    #for(category in categories):
+                        <option value="#(category.id)"#if(product.category): #if(category.id == product.category.id):selected#endif#endif>#(category.name)</option>
+                    #endfor
+                </select>
+            </label>
             <p>
                 <button type="submit">Save cahnges</button>
                 <a class="button" href="/web/products">Cancel</a>

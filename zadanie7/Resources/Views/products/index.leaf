@@ -12,6 +12,7 @@
                         <th>Price</th>
                         <th>Description</th>
                         <th>Quantity</th>
+                        <th>Category</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -22,6 +23,7 @@
                             <td>#(product.price)</td>
                             <td>#(product.description)</td>
                             <td>#(product.quantity)</td>
+                            <td>#if(product.category):#(product.category.name)#else:-#endif</td>
                             <td>
                                 <a class="button" href="/web/products/#(product.id)">View</a>
                                 <a class="button" href="/web/products/#(product.id)/edit">Edit</a>

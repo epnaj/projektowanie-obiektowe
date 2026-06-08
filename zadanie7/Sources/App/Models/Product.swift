@@ -19,6 +19,9 @@ final class Product: Model, Content {
     @Field(key: "quantity")
     var quantity: Int
 
+    @OptionalParent(key: "category_id")
+    var category: Category?
+
     init() {}
 
     init(id: UUID? = nil, name: String, price: Double, description: String? = nil, quantity: Int = 0) {

@@ -1,0 +1,14 @@
+#extend("base"):
+    #export("title"): Edit category #endexport
+    #export("body"):
+        <form method="post" action="/web/categories/#(category.id)/edit">
+            <label>Name
+                <input type="text" name="name" value="#(category.name)" required>
+            </label>
+            <p>
+                <button type="submit">Save changes</button>
+                <a class="button" href="/web/categories">Cancel</a>
+            </p>
+        </form>
+    #endexport
+#endextend

@@ -7,6 +7,8 @@ public func configure(_ app: Application) throws {
     app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
 
     app.migrations.add(CreateProduct())
+    app.migrations.add(CreateCategory())
+    app.migrations.add(AddCategoryToProduct())
 
     try app.autoMigrate().wait()
 
