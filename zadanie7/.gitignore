@@ -1,0 +1,5 @@
+.build/
+*.sqlite
+db.sqlite
+.swiftpm/
+Package.resolved
