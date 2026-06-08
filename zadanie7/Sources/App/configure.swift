@@ -1,16 +1,15 @@
-import Fluent
-import FluentSQLiteDriver
+import Foundation
 import Leaf
+import Redis
 import Vapor
 
 public func configure(_ app: Application) throws {
-    app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
-
-    app.migrations.add(CreateProduct())
-    app.migrations.add(CreateCategory())
-    app.migrations.add(AddCategoryToProduct())
-
-    try app.autoMigrate().wait()
+    if let urlString = Environment.get("REDIS_URL"), let url = URL(string: urlString) {
+        app.redis.configuration = try RedisConfiguration(url: url)
+    } else {
+        let hostname = Environment.get("REDIS_HOST") ?? "127.0.0.1"
+        app.redis.configuration = try RedisConfiguration(hostname: hostname, port: 6379)
+    }
 
     app.views.use(.leaf)
 

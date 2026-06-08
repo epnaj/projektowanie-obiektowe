@@ -8,8 +8,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.92.0"),
-        .package(url: "https://github.com/vapor/fluent.git", from: "4.9.0"),
-        .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.6.0"),
+        .package(url: "https://github.com/vapor/redis.git", from: "4.10.0"),
         .package(url: "https://github.com/vapor/leaf.git", from: "4.2.4"),
     ],
     targets: [
@@ -17,8 +16,7 @@ let package = Package(
             name: "App",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
-                .product(name: "Fluent", package: "fluent"),
-                .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
+                .product(name: "Redis", package: "redis"),
                 .product(name: "Leaf", package: "leaf"),
             ],
             path: "Sources/App"

@@ -1,4 +1,4 @@
-import Fluent
+import Redis
 import Vapor
 
 struct ProductController: RouteCollection {
@@ -6,7 +6,7 @@ struct ProductController: RouteCollection {
         let products = routes.grouped("products")
         products.get(use: index)
         products.post(use: create)
-        products.group(":productID") { 
+        products.group(":productID") {
             product in
                 product.get(use: show)
                 product.put(use: update)
@@ -16,55 +16,58 @@ struct ProductController: RouteCollection {
 
     // GET /products
     func index(req: Request) async throws -> [Product] {
-        try await Product.query(on: req.db).all()
+        try await repository(req).all()
     }
 
     // POST /products
     func create(req: Request) async throws -> Product {
-        let product = try req.content.decode(Product.self)
+        var product = try req.content.decode(Product.self)
         try product.validateBusinessRules()
 
-        try await product.create(on: req.db)
+        let id = product.id ?? UUID()
+        product.id = id
+        try await repository(req).save(id, product)
         return product
     }
 
     // GET /products/:productID
     func show(req: Request) async throws -> Product {
-        guard let product = try await Product.find(
-            req.parameters.get("productID"), 
-            on: req.db
-        ) else {
-            throw Abort(.notFound)
-        }
-        return product
+        try await find(req)
     }
 
     // PUT /products/:productID
     func update(req: Request) async throws -> Product {
-        guard let product = try await Product.find(req.parameters.get("productID"), on: req.db) else {
-            throw Abort(.notFound)
-        }
-        let updated         = try req.content.decode(Product.self)
+        var product     = try await find(req)
+        let updated     = try req.content.decode(Product.self)
         product.name        = updated.name
         product.price       = updated.price
         product.description = updated.description
-        product.quantity = updated.quantity
+        product.quantity    = updated.quantity
+        product.categoryID  = updated.categoryID
         try product.validateBusinessRules()
 
-        try await product.update(on: req.db)
+        try await repository(req).save(product.id!, product)
         return product
     }
 
     // DELETE /products/:productID
     func delete(req: Request) async throws -> HTTPStatus {
-        guard let product = try await Product.find(
-            req.parameters.get("productID"), 
-            on: req.db
-        ) else {
+        let product = try await find(req)
+        try await repository(req).delete(product.id!)
+        return .noContent
+    }
+
+    private func repository(_ req: Request) -> RedisRepository<Product> {
+        RedisRepository(client: req.redis, prefix: "product", indexKey: "products")
+    }
+
+    private func find(_ req: Request) async throws -> Product {
+        guard let id = req.parameters.get("productID", as: UUID.self) else {
+            throw Abort(.badRequest)
+        }
+        guard let product = try await repository(req).find(id) else {
             throw Abort(.notFound)
         }
-
-        try await product.delete(on: req.db)
-        return .noContent
+        return product
     }
 }
