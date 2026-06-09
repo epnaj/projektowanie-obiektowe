@@ -13,6 +13,27 @@ const products = [
   { id: 4, name: 'pendrive', price: 240 }
 ];
 const payments = [];
+const users = [];
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validateRegistration(body) {
+  const errors = {};
+  const username = typeof body.username === 'string' ? body.username.trim() : '';
+  const email = typeof body.email === 'string' ? body.email.trim() : '';
+  const password = typeof body.password === 'string' ? body.password : '';
+
+  if (!username) 
+    errors.username = 'username is required';
+  if (!email) 
+    errors.email = 'email is required';
+  else if (!EMAIL_RE.test(email)) 
+    errors.email = 'invalid email format';
+  if (!password) 
+    errors.password = 'password is required';
+
+  return { errors, username, email };
+}
 
 const MIME = { '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.ico': 'image/x-icon' };
 
@@ -100,6 +121,26 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 201, payment);
     } catch { 
       return sendJson(res, 400, { error: 'Invalid JSON' }); 
+    }
+  }
+
+  if (req.method === 'POST' && pathname === '/api/register') {
+    try {
+      const body = await readBody(req);
+      const { errors, username, email } = validateRegistration(body);
+      
+      if (Object.keys(errors).length > 0) {
+        return sendJson(res, 400, { errors });
+      }
+      const user = { 
+        id: users.length + 1, 
+        username, email 
+      };
+      users.push(user);
+
+      return sendJson(res, 201, { id: user.id, username: user.username, email: user.email });
+    } catch {
+      return sendJson(res, 400, { error: 'Invalid JSON' });
     }
   }
   if (pathname.startsWith('/api/')) return sendJson(res, 404, { error: 'Not found' });
