@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
 import Products from './Products.jsx';
 import Cart from './Cart.jsx';
 import Payments from './Payments.jsx';
+import Register from './Register.jsx';
 import { CartProvider } from './CartContext.jsx';
 
 export default function App() {
@@ -14,12 +15,14 @@ export default function App() {
             <Link to="/products">Products</Link>
             <Link to="/cart">Cart</Link>
             <Link to="/payments">Payments</Link>
+            <Link to="/register">Register</Link>
           </nav>
           <Routes>
             <Route path="/" element={<Navigate to="/products" replace />} />
             <Route path="/products" element={<Products />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/payments" element={<Payments />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
       </BrowserRouter>

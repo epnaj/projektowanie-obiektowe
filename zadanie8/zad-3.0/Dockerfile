@@ -2,8 +2,9 @@ FROM python:3.12-slim
 
 WORKDIR /tests
 
-RUN pip install --no-cache-dir requests
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY test_register.py .
+COPY test_register_ui.py test_register.py ./
 
-CMD ["python", "test_register.py"]
+CMD ["python", "test_register_ui.py"]

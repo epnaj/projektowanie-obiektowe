@@ -126,7 +126,7 @@ def main() -> None:
 
     passed: int = sum(results)
     total: int = len(results)
-    print("\n{}/{} assertions passed".format(passed, total))
+    print(f"\n{passed}/{total} assertions passed")
     sys.exit(0 if passed == total else 1)
 
 
