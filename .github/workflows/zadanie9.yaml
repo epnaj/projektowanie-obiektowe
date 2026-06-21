@@ -1,0 +1,56 @@
+name: Zadanie 9
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_SERVER: ghcr.io/epnaj/zadanie9-server
+  IMAGE_CLIENT: ghcr.io/epnaj/zadanie9-client
+
+jobs:
+  build:
+    name: Build & push images
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & push server image
+        uses: docker/build-push-action@v6
+        with:
+          context: zadanie5/server
+          file: zadanie5/server/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ${{ env.IMAGE_SERVER }}:latest
+            ${{ env.IMAGE_SERVER }}:${{ github.sha }}
+
+      - name: Build & push client image
+        uses: docker/build-push-action@v6
+        with:
+          context: zadanie5/client
+          file: zadanie5/client/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: |
+            ${{ env.IMAGE_CLIENT }}:latest
+            ${{ env.IMAGE_CLIENT }}:${{ github.sha }}
