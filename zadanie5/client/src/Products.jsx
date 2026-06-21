@@ -25,7 +25,7 @@ export default function Products() {
         {products.map((p) => (
           <li key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
             <span><strong>{p.name}</strong> - {p.price} PLN</span>
-            <button type="button" onClick={() => addToCart(p)}>Add to cart</button>
+            <button type="button" data-testid={`add-${p.id}`} onClick={() => addToCart(p)}>Add to cart</button>
           </li>
         ))}
       </ul>
