@@ -15,6 +15,46 @@ const products = [
 const payments = [];
 const users = [];
 
+// additive state: in-memory sessions for the login form / CSRF demo
+const sessions = {};
+
+function readFormOrJsonBody(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', (c) => chunks.push(c));
+    req.on('end', () => {
+      const raw = Buffer.concat(chunks).toString('utf8');
+      if (!raw) return resolve({});
+      const ct = req.headers['content-type'] || '';
+      if (ct.includes('application/x-www-form-urlencoded') || ct.includes('text/plain')) {
+        const out = {};
+        for (const [k, v] of new URLSearchParams(raw)) out[k] = v;
+        return resolve(out);
+      }
+      try {
+        resolve(JSON.parse(raw));
+      } catch (e) {
+        reject(e);
+      }
+    });
+    req.on('error', reject);
+  });
+}
+
+function parseCookies(req) {
+  const header = req.headers.cookie;
+  const out = {};
+  if (!header) return out;
+  for (const part of header.split(';')) {
+    const idx = part.indexOf('=');
+    if (idx === -1) continue;
+    const name = part.slice(0, idx).trim();
+    const value = part.slice(idx + 1).trim();
+    if (name) out[name] = decodeURIComponent(value);
+  }
+  return out;
+}
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function validateRegistration(body) {
@@ -143,6 +183,56 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 400, { error: 'Invalid JSON' });
     }
   }
+
+  if (req.method === 'POST' && pathname === '/api/login') {
+    try {
+      const body = await readBody(req);
+      const email = typeof body.email === 'string' ? body.email.trim() : '';
+      const password = typeof body.password === 'string' ? body.password : '';
+      const errors = {};
+      if (!email) errors.email = 'email is required';
+      else if (!EMAIL_RE.test(email)) errors.email = 'invalid email format';
+      if (!password) errors.password = 'password is required';
+      if (Object.keys(errors).length > 0) return sendJson(res, 400, { errors });
+
+      const sid = 'sess-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      sessions[sid] = email;
+
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+        'Set-Cookie': `sid=${sid}; Path=/`
+      });
+      return res.end(JSON.stringify({ email }));
+    } catch {
+      return sendJson(res, 400, { error: 'Invalid JSON' });
+    }
+  }
+  // GET /api/account: returns the email of the currently logged-in session
+  if (req.method === 'GET' && pathname === '/api/account') {
+    const sid = parseCookies(req).sid;
+    const email = sid && sessions[sid];
+    if (!email) return sendJson(res, 401, { error: 'not logged in' });
+    return sendJson(res, 200, { email });
+  }
+
+  // POST /api/account/settings: changes the account email
+  if (req.method === 'POST' && pathname === '/api/account/settings') {
+    const sid = parseCookies(req).sid;
+    const current = sid && sessions[sid];
+    if (!current) return sendJson(res, 401, { error: 'not logged in' });
+    try {
+      const body = await readFormOrJsonBody(req);
+      const email = typeof body.email === 'string' ? body.email.trim() : '';
+      if (!email || !EMAIL_RE.test(email)) {
+        return sendJson(res, 400, { errors: { email: 'invalid email format' } });
+      }
+      sessions[sid] = email;
+      return sendJson(res, 200, { email });
+    } catch {
+      return sendJson(res, 400, { error: 'Invalid JSON' });
+    }
+  }
+
   if (pathname.startsWith('/api/')) return sendJson(res, 404, { error: 'Not found' });
   serveStatic(req, res);
 });

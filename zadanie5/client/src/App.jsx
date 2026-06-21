@@ -3,6 +3,7 @@ import Products from './Products.jsx';
 import Cart from './Cart.jsx';
 import Payments from './Payments.jsx';
 import Register from './Register.jsx';
+import Login from './Login.jsx';
 import { CartProvider } from './CartContext.jsx';
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
             <Link to="/cart">Cart</Link>
             <Link to="/payments">Payments</Link>
             <Link to="/register">Register</Link>
+            <Link to="/login">Login</Link>
           </nav>
           <Routes>
             <Route path="/" element={<Navigate to="/products" replace />} />
@@ -23,6 +25,7 @@ export default function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/payments" element={<Payments />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </main>
       </BrowserRouter>
