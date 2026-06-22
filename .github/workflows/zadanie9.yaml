@@ -126,3 +126,18 @@ jobs:
               - ${{ env.IMAGE_SERVER }}:${{ github.sha }}
               - ${{ env.IMAGE_CLIENT }}:latest
               - ${{ env.IMAGE_CLIENT }}:${{ github.sha }}
+
+  deploy:
+    name: Deploy to cloud (Oracle VM)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: build
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+    steps:
+      - name: Trigger Watchtower update on VM (server + client)
+        run: |
+          curl -sSf \
+            -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" \
+            "${{ secrets.WATCHTOWER_URL }}/v1/update"
