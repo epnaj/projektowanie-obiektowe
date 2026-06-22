@@ -35,9 +35,9 @@ docker run --rm -d \
   "${IMAGE_CLIENT}"
 
 echo "(Re)start Watchtower — HTTP API (port ${WATCHTOWER_PORT}) + polling fallback"
-# --label-enable: watches only containers labeled watchtower.enable=true
-# WATCHTOWER_HTTP_API_UPDATE: enables /v1/update endpoint triggered by the deploy job
-# --interval 60: fallback polling of ghcr.io; --cleanup: removes old images
+
+# SOME TEST CHANGE  
+
 docker rm -f z9-watchtower >/dev/null 2>&1 || true
 docker run --rm -d \
   --name z9-watchtower \
