@@ -92,3 +92,37 @@ jobs:
           tags: |
             ${{ env.IMAGE_CLIENT }}:latest
             ${{ env.IMAGE_CLIENT }}:${{ github.sha }}
+
+  notify:
+    name: Email notification
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [build-app, build]
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+    steps:
+      - name: Send build success email (SMTP)
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_HOST }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          secure: true
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          from: ${{ secrets.MAIL_FROM }}
+          to: ${{ secrets.MAIL_TO }}
+          subject: "[Zadanie 9] Aplikacja zbudowana — ${{ github.sha }}"
+          body: |
+            GH actions: aplikacja zbudowana
+
+            Repozytorium: ${{ github.repository }}
+            Commit:       ${{ github.sha }}
+            Branch:       ${{ github.ref_name }}
+            Workflow:     ${{ github.workflow }} (run #${{ github.run_number }})
+
+            Opublikowane obrazy (ghcr.io):
+              - ${{ env.IMAGE_SERVER }}:latest
+              - ${{ env.IMAGE_SERVER }}:${{ github.sha }}
+              - ${{ env.IMAGE_CLIENT }}:latest
+              - ${{ env.IMAGE_CLIENT }}:${{ github.sha }}
