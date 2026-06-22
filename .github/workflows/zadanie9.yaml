@@ -93,6 +93,43 @@ jobs:
             ${{ env.IMAGE_CLIENT }}:latest
             ${{ env.IMAGE_CLIENT }}:${{ github.sha }}
 
+  regression-tests:
+    name: Regression E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: build-app
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build app image (client + server)
+        run: docker build -t z9-app -f zadanie8/zad-5.0/app.Dockerfile zadanie5
+
+      - name: Build Playwright test image
+        run: docker build -t z9-e2e zadanie8/zad-5.0
+
+      - name: Start app container
+        run: docker run --rm -d --network host --name z9-app z9-app
+
+      - name: Wait for app to be ready (:8000)
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8000/ >/dev/null; then
+              echo "App is up"; exit 0
+            fi
+            sleep 1
+          done
+          echo "App did not become ready in time"; docker logs z9-app || true; exit 1
+
+      - name: Run Playwright regression suite
+        run: docker run --rm --network host z9-e2e
+
+      - name: Stop app container
+        if: always()
+        run: docker stop z9-app || true
+
   notify:
     name: Email notification
     runs-on: ubuntu-latest
@@ -131,7 +168,7 @@ jobs:
     name: Deploy to cloud (Oracle VM)
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: build
+    needs: [build, regression-tests]
     if: github.event_name != 'pull_request'
     permissions:
       contents: read

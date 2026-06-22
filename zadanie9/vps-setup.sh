@@ -43,7 +43,9 @@ docker run --rm -d \
   --name z9-watchtower \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -p "${WATCHTOWER_PORT}:8080" \
+  -e "DOCKER_API_VERSION=${DOCKER_API_VERSION:-1.44}" \
   -e WATCHTOWER_HTTP_API_UPDATE=true \
+  -e WATCHTOWER_HTTP_API_PERIODIC_POLLS=true \
   -e "WATCHTOWER_HTTP_API_TOKEN=${WATCHTOWER_TOKEN}" \
   containrrr/watchtower:latest \
   --label-enable \
