@@ -13,10 +13,48 @@ env:
   IMAGE_CLIENT: ghcr.io/epnaj/zadanie9-client
 
 jobs:
+  build-app:
+    name: Build application
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install client dependencies
+        working-directory: zadanie5/client
+        run: |
+          npm install
+          npm install prop-types
+
+      - name: Build client (Vite production build)
+        working-directory: zadanie5/client
+        run: npm run build
+
+      - name: Upload client build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-dist
+          path: zadanie5/client/dist
+
+      - name: Install & verify server
+        working-directory: zadanie5/server
+        run: |
+          npm install
+          node --check index.js
+
   build:
     name: Build & push images
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    needs: build-app
     permissions:
       contents: read
       packages: write
