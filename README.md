@@ -204,3 +204,80 @@ KOD: [LINK DO ZADANIA 5](https://github.com/epnaj/projektowanie-obiektowe/tree/m
 ✅ 4.5 Należy usunąć problemy typu Code Smell w kodzie w Sonarze (kotlin, go, js). Należy dodać badge z Sonara [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/863eb18)
 
 ✅ Skonfigurować Github Actions z linterem oraz CodeQL [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/7b7f91a)
+
+---
+
+### Zadanie 8
+
+✅ 3.0 Przetestuj formularz rejestracji użytkownika pod kątem walidacji pól obowiązkowych oraz zachowania aplikacji po wprowadzeniu niepoprawnego formatu adresu e-mail [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/7155e60)
+
+```bash
+cd zadanie8/zad-3.0
+./run-docker-tests.sh
+```
+
+> Selenium (`test_register_ui.py`) sprawdza walidację pól obowiązkowych i odrzucenie błędnego formatu e-mail; `test_register.py` waliduje warstwę API rejestracji.
+
+✅ 3.5 Przeprowadź testy bezpieczeństwa typu Cross-Site Scripting (XSS), próbując wstrzyknąć złośliwy kod JavaScript w aplikacji z Reactem [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/51e8e0f)
+
+```bash
+cd zadanie8/zad-3.5
+./run-docker-tests.sh
+```
+
+> `test_xss.py` wstrzykuje payloady (`<script>`, `<img onerror=...>`) w pola formularzy i potwierdza, że React escapuje dane i nie dochodzi do wykonania JS.
+
+✅ 4.0 Przetestuj działanie koszyka zakupowego przy jednoczesnym otwarciu aplikacji w kilku osobnych kartach tej samej przeglądarki, sprawdzając spójność stanów zamówienia [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/1af7ccc)
+
+```bash
+cd zadanie8/zad-4.0
+./run-docker-tests.sh
+```
+
+✅ 4.5 Do zadania z React'a należy dodać formularz logowania. Następnie
+przeprowadź testy podatności na ataki typu Cross-Site Request Forgery
+(CSRF), próbując wymusić nieautoryzowaną zmianę ustawień konta
+spreparowanym linkiem, podczas gdy użytkownik posiada aktywną sesję w
+innej karcie. [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/89585a3)
+
+```bash
+cd zadanie8/zad-4.5
+./run-docker-tests.sh
+```
+
+✅ 5.0 Scenariusz End-to-End w Playwright (minimum 50 asercji) [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/53a319d)
+
+```bash
+cd zadanie8/zad-5.0
+./run-docker-tests.sh
+```
+
+> `e2e.spec.js` — pełny przepływ użytkownika (przeglądanie produktów, koszyk, zamówienie, logowanie) z ponad 50 asercjami, uruchamiany w obrazie `mcr.microsoft.com/playwright`.
+
+KOD: [LINK DO ZADANIA 8](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie8)
+
+---
+
+### Zadanie 9
+
+> Aplikacja na chmurze: **http://130.61.69.67:5173** (API: http://130.61.69.67:8000)
+
+✅ 3.0 Należy stworzyć odpowiednie instancje po stronie chmury na dockerze
+
+> Na maszynie Oracle Cloud VM działają kontenery `z9-server` (port 8000) i `z9-client` (port 5173), pobierane z `ghcr.io`
+
+```bash
+PUBLIC_IP=130.61.69.67 WATCHTOWER_TOKEN=<token> ./zadanie9/vps-setup.sh
+```
+
+✅ 3.5 Stworzyć odpowiedni pipeline w Github Actions do budowania aplikacji [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/ceb3537)
+
+✅ 4.0 Dodać notyfikację mailową o zbudowaniu aplikacji [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/20603b0)
+
+✅ 4.5 Dodać krok z deploymentem aplikacji serwerowej oraz klienckiej na chmurę [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/22f789d)
+
+> Job `deploy` (po przejściu testów regresyjnych) woła HTTP API Watchtowera na VM (`POST /v1/update`, Bearer token), który pobiera nowe obrazy `latest` i restartuje kontenery `z9-server` i `z9-client`. Deployment pull-based, bez SSH.
+
+✅ 5.0 Dodać uruchomienie regresyjnych testów automatycznych (funkcjonalnych) jako krok w Actions [LINK](https://github.com/epnaj/projektowanie-obiektowe/commit/a6b158b)
+
+KOD: [LINK DO ZADANIA 9](https://github.com/epnaj/projektowanie-obiektowe/tree/main/zadanie9)

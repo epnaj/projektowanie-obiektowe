@@ -19,15 +19,17 @@ docker pull "${IMAGE_CLIENT}"
 
 echo "(Re)start server container (port ${SERVER_PORT})"
 docker rm -f z9-server >/dev/null 2>&1 || true
-docker run --rm -d \
+docker run -d --restart unless-stopped \
   --name z9-server \
   --label com.centurylinklabs.watchtower.enable=true \
   -p "${SERVER_PORT}:8000" \
   "${IMAGE_SERVER}"
 
+sleep 30
+
 echo "(Re)start clienta container (port ${CLIENT_PORT})"
 docker rm -f z9-client >/dev/null 2>&1 || true
-docker run --rm -d \
+docker run -d --restart unless-stopped \
   --name z9-client \
   --label com.centurylinklabs.watchtower.enable=true \
   -p "${CLIENT_PORT}:5173" \
@@ -39,7 +41,7 @@ echo "(Re)start Watchtower — HTTP API (port ${WATCHTOWER_PORT}) + polling fall
 # SOME TEST CHANGE  
 
 docker rm -f z9-watchtower >/dev/null 2>&1 || true
-docker run --rm -d \
+docker run -d --restart unless-stopped \
   --name z9-watchtower \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -p "${WATCHTOWER_PORT}:8080" \
