@@ -260,7 +260,7 @@ KOD: [LINK DO ZADANIA 8](https://github.com/epnaj/projektowanie-obiektowe/tree/m
 
 ### Zadanie 9
 
-> Aplikacja na chmurze: **http://130.61.69.67:5173** (API: http://130.61.69.67:8000)
+> [APLIKACJA JUŻ NIEDOSTPĘPNA POD TYM ADRESEM] Aplikacja na chmurze: **http://130.61.69.67:5173** (API: http://130.61.69.67:8000)
 
 ✅ 3.0 Należy stworzyć odpowiednie instancje po stronie chmury na dockerze
 
